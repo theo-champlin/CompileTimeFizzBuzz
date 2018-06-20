@@ -1,69 +1,95 @@
+#include <array>
 #include <iostream>
-#include <tuple>
-#include <utility>
+#include <boost/mpl/string.hpp>
+#include <string_view>
 
-template <typename ValueType>
-void WriteLine(ValueType value)
+template <bool baseCase, unsigned value>
+struct ConvertToStringHelper
 {
-   std::cout << value << std::endl;
-}
+   using type =
+      typename boost::mpl::push_back<
+      typename ConvertToStringHelper<
+         value < 10,
+         value / 10
+      >::type,
+      boost::mpl::char_<'0' + value % 10>
+   >::type;
+};
 
-template <typename ValueType, typename... Args>
-void WriteLine(ValueType value, Args&&... args)
+template <>
+struct ConvertToStringHelper<true, 0>
 {
-   std::cout << value << std::endl;
-   WriteLine(std::forward<Args&&>(args)...);
-}
+   using type = boost::mpl::string<>;
+};
 
-template <std::size_t... Is, typename Tup>
-void Write(std::index_sequence<Is...>, Tup values)
-{
-   WriteLine(std::get<Is>(values)...);
-}
 
-template<typename Tup>
-void Write(Tup&& values)
+template <unsigned value>
+struct ConvertToString
 {
-   Write(
-      std::make_index_sequence<std::tuple_size<std::decay_t<Tup>>::value>{},
-      std::forward<Tup&&>(values));
-}
+   using type =
+      typename boost::mpl::c_str<
+         typename ConvertToStringHelper<
+            value < 10,
+            value
+         >::type
+      >::type;
+};
 
-template<std::size_t value>
-constexpr auto FizzBuzzConvert()
+template<unsigned current>
+constexpr std::string_view FizzBuzzHelper()
 {
-   if constexpr (!(value % 3) && !(value % 5))
+   if constexpr (!(current % 3) && !(current % 5))
    {
-      return "FizzBuzz";
+      return { "FizzBuzz" };
    }
-   else if constexpr (!(value % 3))
+   if constexpr (!(current % 3))
    {
-      return "Fizz";
+      return { "Fizz" };
    }
-   else if constexpr (!(value % 5))
+   if constexpr (!(current % 5))
    {
-      return "Buzz";
+      return { "Buzz" };
    }
-   else
-   {
-      return value;
-   }
+
+   return { ConvertToString<current>::type::value };
 }
 
-template<std::size_t... Indicies>
-constexpr auto GenerateFuzzBuzzValues(std::index_sequence<Indicies...>)
+template<unsigned count>
+struct FizzBuzzArray
 {
-   return std::make_tuple(FizzBuzzConvert<Indicies + 1UL>()...);
-}
+   template<typename... OutputStrings>
+   static constexpr auto Generate(OutputStrings&&... args)
+   {
+      return FizzBuzzArray<count - 1>::Generate(
+         FizzBuzzHelper<count>(),
+         args...);
+   }
+};
 
-template<std::size_t Count>
-constexpr auto FizzBuzz()
+template<>
+struct FizzBuzzArray<0>
 {
-   return GenerateFuzzBuzzValues(std::make_index_sequence<Count>{});
+   template<typename... OutputStrings>
+   static constexpr auto Generate(OutputStrings&&... args)
+   {
+      return std::array<std::string_view, sizeof...(OutputStrings)>
+      {
+         args...
+      };
+   }
+};
+
+template<unsigned end>
+void FizzBuzz()
+{
+   auto output = FizzBuzzArray<end>::Generate();
+   for (auto&& entry : output)
+   {
+      std::cout << entry << std::endl;
+   }
 }
 
 int main()
 {
-   constexpr auto local = FizzBuzz<100>();
-   Write(local);
+   FizzBuzz<100>();
 }
