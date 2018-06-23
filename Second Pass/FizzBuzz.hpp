@@ -1,5 +1,5 @@
-#include "constant_expression/string.hpp"
 #include "constant_expression/number_to_string.hpp"
+#include "constant_expression/string.hpp"
 
 template<unsigned value>
 constexpr auto FizzBuzzConvert()
