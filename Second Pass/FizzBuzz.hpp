@@ -44,9 +44,3 @@ constexpr auto FizzBuzz<1>()
 {
     return FizzBuzzConvert<1>();
 }
-
-int main()
-{
-    constexpr auto value = FizzBuzz<101>();
-    std::cout << value.c_str() << std::endl;
-}
