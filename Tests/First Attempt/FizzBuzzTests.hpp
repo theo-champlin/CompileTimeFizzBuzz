@@ -2,51 +2,74 @@
 
 TEST_CASE("First element")
 {
-   constexpr auto expected = std::array<std::string_view, 1>{ "1" };
+   constexpr std::size_t target = 1;
+   constexpr auto expected = std::array<std::string_view, target>
+   {
+      "1"
+   };
+   constexpr auto result = FizzBuzz<target>();
 
-   static_assert(expected == FizzBuzz<1>());
+   REQUIRE(expected == result);
 }
 
 TEST_CASE("First string")
 {
-   constexpr auto expected = std::array<std::string_view, 3>
-      { "1", "2", "Fizz" };
+   constexpr std::size_t target = 3;
+   constexpr auto expected = std::array<std::string_view, target>
+   {
+      "1", "2", "Fizz"
+   };
+   constexpr auto result = FizzBuzz<target>();
 
-   static_assert(expected == FizzBuzz<3>());
+   REQUIRE(expected == result);
 }
 
 TEST_CASE("First Buzz")
 {
-   constexpr auto expected = std::array<std::string_view, 5>
-      { "1", "2", "Fizz", "4", "Buzz" };
+   constexpr std::size_t target = 5;
+   constexpr auto expected = std::array<std::string_view, target>
+   {
+      "1", "2", "Fizz", "4", "Buzz"
+   };
+   constexpr auto result = FizzBuzz<target>();
 
-   static_assert(expected == FizzBuzz<5>());
+   REQUIRE(expected == result);
 }
 
 TEST_CASE("First two digit number")
 {
-   constexpr auto expected = std::array<std::string_view, 11>
-      { "1", "2", "Fizz", "4", "Buzz",
+   constexpr std::size_t target = 11;
+   constexpr auto expected = std::array<std::string_view, target>
+   {
+      "1", "2", "Fizz", "4", "Buzz",
       "Fizz", "7", "8", "Fizz", "Buzz",
-      "11" };
+      "11"
+   };
+   constexpr auto result = FizzBuzz<target>();
 
-   static_assert(expected == FizzBuzz<11>());
+   REQUIRE(expected == result);
 }
 
 TEST_CASE("First FizzBuzz")
 {
-   constexpr auto expected = std::array<std::string_view, 15>
-      { "1", "2", "Fizz", "4", "Buzz",
+   constexpr std::size_t target = 15;
+   constexpr auto expected = std::array<std::string_view, target>
+   {
+      "1", "2", "Fizz", "4", "Buzz",
       "Fizz", "7", "8", "Fizz", "Buzz",
-      "11", "Fizz", "13", "14", "FizzBuzz" };
+      "11", "Fizz", "13", "14", "FizzBuzz"
+   };
+   constexpr auto result = FizzBuzz<target>();
 
-   static_assert(expected == FizzBuzz<15>());
+   REQUIRE(expected == result);
 }
 
 TEST_CASE("First 100")
 {
-   constexpr auto expected = std::array<std::string_view, 100>
-      { "1", "2", "Fizz", "4", "Buzz",
+   constexpr std::size_t target = 100;
+   constexpr auto expected = std::array<std::string_view, target>
+   {
+      "1", "2", "Fizz", "4", "Buzz",
       "Fizz", "7", "8", "Fizz", "Buzz",
       "11", "Fizz", "13", "14", "FizzBuzz",
       "16", "17", "Fizz", "19", "Buzz",
@@ -65,7 +88,9 @@ TEST_CASE("First 100")
       "Fizz", "82", "83", "Fizz", "Buzz",
       "86", "Fizz", "88", "89", "FizzBuzz",
       "91", "92", "Fizz", "94", "Buzz",
-      "Fizz", "97", "98", "Fizz", "Buzz" };
+      "Fizz", "97", "98", "Fizz", "Buzz"
+   };
+   constexpr auto result = FizzBuzz<target>();
 
-   static_assert(expected == FizzBuzz<100>());
+   REQUIRE(expected == result);
 }
