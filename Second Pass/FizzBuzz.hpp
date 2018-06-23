@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include "constant_expression/string.hpp"
 #include "constant_expression/number_to_string.hpp"
 
