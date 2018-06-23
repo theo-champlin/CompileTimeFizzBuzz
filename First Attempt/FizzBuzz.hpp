@@ -27,11 +27,9 @@ template <unsigned value>
 struct ConvertToString
 {
    using type =
-      typename boost::mpl::c_str<
-         typename ConvertToStringHelper<
-            value < 10,
-            value
-         >::type
+      typename ConvertToStringHelper<
+         value < 10,
+         value
       >::type;
 };
 
@@ -42,16 +40,24 @@ constexpr std::string_view FizzBuzzHelper()
    {
       return { "FizzBuzz" };
    }
-   if constexpr (!(current % 3))
+   else if constexpr (!(current % 3))
    {
       return { "Fizz" };
    }
-   if constexpr (!(current % 5))
+   else if constexpr (!(current % 5))
    {
       return { "Buzz" };
    }
+   else
+   {
+      using converted = typename ConvertToString<current>::type;
+      return
+      {
+         boost::mpl::c_str<converted>::type::value,
+         boost::mpl::size<converted>::value
+      };
+   }
 
-   return { ConvertToString<current>::type::value };
 }
 
 template<unsigned count>
@@ -80,16 +86,7 @@ struct FizzBuzzArray<0>
 };
 
 template<unsigned end>
-void FizzBuzz()
+constexpr auto FizzBuzz()
 {
-   auto output = FizzBuzzArray<end>::Generate();
-   for (auto&& entry : output)
-   {
-      std::cout << entry << std::endl;
-   }
-}
-
-int main()
-{
-   FizzBuzz<100>();
+   return FizzBuzzArray<end>::Generate();
 }
