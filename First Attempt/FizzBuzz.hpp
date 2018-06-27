@@ -7,12 +7,12 @@ struct ConvertToStringHelper
 {
    using type =
       typename boost::mpl::push_back<
-      typename ConvertToStringHelper<
-         value < 10,
-         value / 10
-      >::type,
-      boost::mpl::char_<'0' + value % 10>
-   >::type;
+         typename ConvertToStringHelper<
+            value < 10,
+            value / 10
+         >::type,
+         boost::mpl::char_<'0' + value % 10>
+      >::type;
 };
 
 template <>
@@ -33,7 +33,7 @@ struct ConvertToString
 };
 
 template<unsigned current>
-constexpr std::string_view FizzBuzzHelper()
+constexpr auto FizzBuzzHelper() -> std::string_view
 {
    if constexpr (!(current % 3) && !(current % 5))
    {
