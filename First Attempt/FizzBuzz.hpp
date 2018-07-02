@@ -2,6 +2,9 @@
 #include <boost/mpl/string.hpp>
 #include <string_view>
 
+// Remove the last digit and convert the removed digit to a characted. Recursively
+// call to convert all the digits, appending the current converted digit to the end.
+// Base case occurs when there is only one remaining digit (value < 10).
 template <bool baseCase, unsigned value>
 struct ConvertToStringHelper
 {
@@ -49,6 +52,11 @@ constexpr auto FizzBuzzHelper() -> std::string_view
    }
    else
    {
+      // Create a string_view from the string conversion. boost::mpl::c_str
+      // detects the value of the converted string type at compile time and
+      // boost::mpl::size detects the size. We need to pass in the size because
+      // several compilers have still not implemented strlen of string literals
+      // at compile time.
       using converted = typename ConvertToString<current>::type;
       return
       {
@@ -59,6 +67,8 @@ constexpr auto FizzBuzzHelper() -> std::string_view
 
 }
 
+// Run FizzBuzz on each value from the max down to 1. The result is added to
+// the parameter pack and passed to the recursive call.
 template<unsigned count>
 struct FizzBuzzArray
 {
@@ -71,6 +81,7 @@ struct FizzBuzzArray
    }
 };
 
+// Insert all results into an array. This is then passed back up the recursive chain.
 template<>
 struct FizzBuzzArray<0>
 {
