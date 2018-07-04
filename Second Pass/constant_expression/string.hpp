@@ -206,7 +206,7 @@ namespace constant_expression
          return !length;
       }
 
-      constexpr size_type size() const
+      constexpr size_type size() const noexcept
       {
          return length;
       }
@@ -283,7 +283,7 @@ namespace constant_expression
          }
       }
 
-      constexpr void fill(char c)
+      constexpr void fill(char c) noexcept
       {
          for (size_type index = 0; index < length; ++index)
          {
